@@ -8,7 +8,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/dbainbriciena/jwt-aaa/pkg/example"
+	pb "github.com/dbainbri-ciena/jwt-aaa/pkg/example"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"

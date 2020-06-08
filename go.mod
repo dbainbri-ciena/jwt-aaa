@@ -1,4 +1,4 @@
-module github.com/dbainbriciena/jwt-aaa
+module github.com/dbainbri-ciena/jwt-aaa
 
 go 1.14
 
