@@ -1,0 +1,11 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+package example;
+option go_package = "pkg/example";
+
+service Example {
+  rpc SetServiceValue(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc GetServiceValue(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}
+
