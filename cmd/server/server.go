@@ -19,12 +19,12 @@ import (
 
 // CustomClaim specifies the user that the client claims to be
 type CustomClaim struct {
-	Uid string
+	UID string
 }
 
 // Valid if a UID is claimed
 func (c *CustomClaim) Valid() error {
-	if c.Uid == "" {
+	if c.UID == "" {
 		return errors.New("invalid claim")
 	}
 	return nil
@@ -88,9 +88,9 @@ func (s *serverImpl) authorizationInterceptor(ctx context.Context, req interface
 			log.Printf("WARNING: REJECT call to '%s': no UID claim", info.FullMethod)
 			return nil, errors.New("not authorized")
 		}
-		user, ok := s.rbac[claims.Uid]
+		user, ok := s.rbac[claims.UID]
 		if !ok {
-			log.Printf("WARNING: REJECT '%s' for '%s', unconfigured user", claims.Uid, info.FullMethod)
+			log.Printf("WARNING: REJECT '%s' for '%s', unconfigured user", claims.UID, info.FullMethod)
 			return nil, errors.New("not authorized")
 		}
 
@@ -103,16 +103,16 @@ func (s *serverImpl) authorizationInterceptor(ctx context.Context, req interface
 
 	roles, ok := roleByMethod[info.FullMethod]
 	if !ok {
-		log.Printf("WARNING: REJECT '%s' for '%s',  not configured for security\n", claims.Uid, info.FullMethod)
+		log.Printf("WARNING: REJECT '%s' for '%s',  not configured for security\n", claims.UID, info.FullMethod)
 		return nil, errors.New("not authorized")
 	}
 
-	if !match(s.rbac[claims.Uid].Roles, roles) {
-		log.Printf("WARNING: REJECT '%s' for '%s',  does not have required role %s\n", claims.Uid, info.FullMethod, roles)
+	if !match(s.rbac[claims.UID].Roles, roles) {
+		log.Printf("WARNING: REJECT '%s' for '%s',  does not have required role %s\n", claims.UID, info.FullMethod, roles)
 		return nil, errors.New("not authorized")
 	}
 
-	log.Printf("INFO: AUTHORIZED '%s' for '%s'\n", claims.Uid, info.FullMethod)
+	log.Printf("INFO: AUTHORIZED '%s' for '%s'\n", claims.UID, info.FullMethod)
 
 	return handler(ctx, req)
 }
@@ -172,10 +172,10 @@ func main() {
 
 	var users stringMap
 	var readers, writers stringArray
-	users.Set("joe:joe_id.pkcs8")
-	users.Set("mary:mary_id.pkcs8")
-	readers.Set("joe")
-	writers.Set("mary")
+	_ = users.Set("joe:joe_id.pkcs8")
+	_ = users.Set("mary:mary_id.pkcs8")
+	_ = readers.Set("joe")
+	_ = writers.Set("mary")
 
 	ep := flag.String("ep", "127.0.0.1:2222", "endpoint  on which to listen")
 	flag.Var(&users, "u", "users and their public keys")

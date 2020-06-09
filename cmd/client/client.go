@@ -19,11 +19,11 @@ import (
 func newAuthorizationInterceptor(uid string, keyFile string) (grpc.UnaryClientInterceptor, error) {
 	keyBytes, err := ioutil.ReadFile(keyFile)
 	if err != nil {
-		return nil, fmt.Errorf("ERROR: unable to read private key file '%s': %v\n", keyFile, err)
+		return nil, fmt.Errorf("unable to read private key file '%s': %v", keyFile, err)
 	}
 	key, err := jwt.ParseRSAPrivateKeyFromPEM(keyBytes)
 	if err != nil {
-		return nil, fmt.Errorf("ERROR: unable to parse private key file '%s': %v\n", keyFile, err)
+		return nil, fmt.Errorf("unable to parse private key file '%s': %v", keyFile, err)
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
@@ -33,7 +33,7 @@ func newAuthorizationInterceptor(uid string, keyFile string) (grpc.UnaryClientIn
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString(key)
 	if err != nil {
-		return nil, fmt.Errorf("ERROR: unable to sign JWT: %v\n", err)
+		return nil, fmt.Errorf("unable to sign JWT: %v", err)
 	}
 
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
